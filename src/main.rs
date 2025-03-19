@@ -4,7 +4,13 @@ use gpui::{
 };
 
 fn main() {
-    Application::new().run(|cx| {
+    let mut args = std::env::args().skip(1);
+    let initial_length: f32 = args
+        .next()
+        .and_then(|arg| arg.parse().ok())
+        .unwrap_or(1024.);
+
+    Application::new().run(move |cx| {
         cx.open_window(
             WindowOptions {
                 focus: true,
@@ -13,7 +19,7 @@ fn main() {
             |window, cx| {
                 cx.new(|_cx| {
                     println!("gpu_specs: {:?}", window.gpu_specs());
-                    PaintingViewer::new(1024.) // 1025 breaks it
+                    PaintingViewer::new(initial_length)
                 })
             },
         )
