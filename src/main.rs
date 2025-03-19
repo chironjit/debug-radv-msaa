@@ -2,6 +2,21 @@ use gpui::{
     Application, Context, Path, Pixels, Render, Window, WindowOptions, canvas, div, point,
     prelude::*, px,
 };
+
+fn main() {
+    Application::new().run(|cx| {
+        cx.open_window(
+            WindowOptions {
+                focus: true,
+                ..Default::default()
+            },
+            |window, cx| cx.new(|cx| PaintingViewer::new(window, cx)),
+        )
+        .unwrap();
+        cx.activate(true);
+    });
+}
+
 struct PaintingViewer {
     length: Pixels,
 }
@@ -14,6 +29,7 @@ impl PaintingViewer {
         }
     }
 }
+
 impl Render for PaintingViewer {
     fn render(&mut self, _: &mut Window, cx: &mut Context<Self>) -> impl IntoElement {
         let length = self.length;
@@ -85,18 +101,4 @@ impl Render for PaintingViewer {
                 ),
             )
     }
-}
-
-fn main() {
-    Application::new().run(|cx| {
-        cx.open_window(
-            WindowOptions {
-                focus: true,
-                ..Default::default()
-            },
-            |window, cx| cx.new(|cx| PaintingViewer::new(window, cx)),
-        )
-        .unwrap();
-        cx.activate(true);
-    });
 }
