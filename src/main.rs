@@ -10,7 +10,12 @@ fn main() {
                 focus: true,
                 ..Default::default()
             },
-            |window, cx| cx.new(|cx| PaintingViewer::new(window, cx)),
+            |window, cx| {
+                cx.new(|_cx| {
+                    println!("gpu_specs: {:?}", window.gpu_specs());
+                    PaintingViewer::new(1024.) // 1025 breaks it
+                })
+            },
         )
         .unwrap();
         cx.activate(true);
@@ -22,11 +27,8 @@ struct PaintingViewer {
 }
 
 impl PaintingViewer {
-    fn new(window: &mut Window, _cx: &mut Context<Self>) -> Self {
-        println!("gpu_specs: {:?}", window.gpu_specs());
-        Self {
-            length: px(1024.), // 1025 breaks it
-        }
+    fn new(length: f32) -> Self {
+        Self { length: px(length) }
     }
 }
 
