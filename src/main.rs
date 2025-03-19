@@ -33,7 +33,7 @@ impl PaintingViewer {
 }
 
 impl Render for PaintingViewer {
-    fn render(&mut self, _: &mut Window, cx: &mut Context<Self>) -> impl IntoElement {
+    fn render(&mut self, window: &mut Window, cx: &mut Context<Self>) -> impl IntoElement {
         let length = self.length;
 
         div()
@@ -49,7 +49,11 @@ impl Render for PaintingViewer {
                     .gap_2()
                     .justify_between()
                     .items_center()
-                    .child(format!("{}", self.length))
+                    .child(if self.length < window.bounds().right() {
+                        format!("{}", self.length)
+                    } else {
+                        "please increase the window width".to_string()
+                    })
                     .child(
                         div()
                             .id("increase")
